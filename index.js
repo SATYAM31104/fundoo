@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 
 require("dotenv").config();
-const PORT =  process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
@@ -10,8 +10,11 @@ require("./config/database").connect(); //database connetion ko form kiya hai id
 
 //route import and mount 
 const user = require("./routes/user");
-app.use("/api/v1" , user);
+app.use("/api/v1", user);
+//notes route
+const noteRoutes = require("./routes/note");
+app.use("/api/v1/notes", noteRoutes);
 
-app.listen(PORT,()=>{
+app.listen(PORT, () => {
     console.log(`App is listening at ${PORT}`);
 })
