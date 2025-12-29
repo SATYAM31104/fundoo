@@ -4,15 +4,17 @@ const bcrypt = require("bcrypt");
 exports.getUser = async (req, res) => {
     try {
         const userId = req.params.id;
-        const user = await User.findById(userId);
+        const user = await User.findById(userId).lean();
         if (!user) {
             return res.status(404).json({
                 success: false,
                 message: "User not found",
             });
         }
-        // Return user data (excluding password ideally, but for basic CRUD we include it or set it to undefined)
-        user.password = undefined;
+
+        // Remove password
+        delete user.password;
+
         res.status(200).json({
             success: true,
             user,
@@ -29,11 +31,11 @@ exports.getUser = async (req, res) => {
 // READ: Get all users
 exports.getAllUsers = async (req, res) => {
     try {
-        const users = await User.find({});
-        
+        const users = await User.find({}).lean();
+
         // Remove passwords from response
         const usersSafe = users.map(user => {
-            user.password = undefined;
+            delete user.password;
             return user;
         });
         res.status(200).json({
@@ -62,14 +64,17 @@ exports.updateUser = async (req, res) => {
             userId,
             { name, role, email },
             { new: true, runValidators: true }
-        );
+        ).lean();
+
         if (!updatedUser) {
             return res.status(404).json({
                 success: false,
                 message: "User not found",
             });
         }
-        updatedUser.password = undefined;
+
+        delete updatedUser.password;
+
         res.status(200).json({
             success: true,
             message: "User updated successfully",
