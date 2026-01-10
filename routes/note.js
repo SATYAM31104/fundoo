@@ -18,7 +18,11 @@ const {
     searchNotes,
     addCollaborator,
     removeCollaborator,
-    getSharedNotes
+    getSharedNotes,
+    getLabels,
+    createLabel,
+    renameLabel,
+    deleteLabel
 } = require("../controllers/note");
 
 // Import middleware
@@ -40,6 +44,10 @@ router.get("/pinned", getPinnedNotes);                 // READ pinned notes
 router.put("/:noteId/archive", toggleArchiveNote);     // TOGGLE archive
 router.put("/:noteId/pin", togglePinNote);             // TOGGLE pin
 router.put("/:noteId/labels", updateLabels);           // UPDATE labels
+router.get("/labels", getLabels);                      // READ unique labels
+router.post("/labels", createLabel);                   // CREATE label
+router.put("/labels/rename", renameLabel);             // RENAME label globally
+router.delete("/labels/delete", deleteLabel);           // DELETE label globally
 
 router.put("/:noteId/trash", moveToTrash);             // MOVE to trash
 router.put("/:noteId/restore", restoreFromTrash);      // RESTORE from trash

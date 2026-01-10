@@ -1,0 +1,192 @@
+.keep-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: var(--primary-bg);
+}
+
+.keep-main-content {
+    display: flex;
+    flex: 1;
+}
+
+.keep-notes-area {
+    flex: 1;
+    padding: 0 16px 16px 16px;
+    overflow-y: auto;
+    max-height: calc(100vh - var(--header-height));
+}
+
+.keep-notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    padding: 16px;
+    width: 100%;
+}
+
+.draggable-note-container {
+    width: 100%;
+    margin-bottom: 0px;
+}
+
+.note-editor {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+}
+
+@media (min-width: 600px) {
+    .keep-notes-grid {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 900px) {
+    .keep-notes-grid {
+        column-count: 3;
+    }
+}
+
+@media (min-width: 1200px) {
+    .keep-notes-grid {
+        column-count: 4;
+    }
+}
+
+@media (min-width: 1500px) {
+    .keep-notes-grid {
+        column-count: 5;
+    }
+}
+
+@media (min-width: 1800px) {
+    .keep-notes-grid {
+        column-count: 6;
+    }
+}
+
+/* Note Editor Background Colors */
+.note-editor.color-red {
+    background-color: var(--color-red);
+}
+
+.note-editor.color-orange {
+    background-color: var(--color-orange);
+}
+
+.note-editor.color-yellow {
+    background-color: var(--color-yellow);
+}
+
+.note-editor.color-green {
+    background-color: var(--color-green);
+}
+
+.note-editor.color-teal {
+    background-color: var(--color-teal);
+}
+
+.note-editor.color-blue {
+    background-color: var(--color-blue);
+}
+
+.note-editor.color-dark-blue {
+    background-color: var(--color-dark-blue);
+}
+
+.note-editor.color-purple {
+    background-color: var(--color-purple);
+}
+
+.note-editor.color-pink {
+    background-color: var(--color-pink);
+}
+
+.note-editor.color-brown {
+    background-color: var(--color-brown);
+}
+
+.note-editor.color-grey {
+    background-color: var(--color-grey);
+}
+
+.keep-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 0;
+    color: var(--text-muted);
+}
+
+.keep-empty-state p {
+    font-size: 22px;
+    margin-top: 20px;
+}
+
+.page-headline {
+    font-size: 22px;
+    color: var(--text-muted);
+    margin: 20px 0;
+    padding: 0 16px;
+}
+
+.section-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin: 32px 16px 8px 16px;
+    letter-spacing: 0.8px;
+}
+
+.notes-container {
+    width: 100%;
+}
+
+/* Proper Masonry with Column Count */
+.keep-notes-grid {
+    column-count: 1;
+    column-gap: 16px;
+    padding: 0 16px;
+    display: block;
+    /* Override grid if it was set */
+    width: 100%;
+}
+
+.keep-notes-grid>div,
+.keep-note-card {
+    break-inside: avoid;
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+@media (min-width: 600px) {
+    .keep-notes-grid {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 900px) {
+    .keep-notes-grid {
+        column-count: 3;
+    }
+}
+
+@media (min-width: 1200px) {
+    .keep-notes-grid {
+        column-count: 4;
+    }
+}
+
+@media (min-width: 1500px) {
+    .keep-notes-grid {
+        column-count: 5;
+    }
+}
+
+@media (min-width: 1800px) {
+    .keep-notes-grid {
+        column-count: 6;
+    }
+}

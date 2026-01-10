@@ -60,8 +60,19 @@ const noteSchema = new mongoose.Schema({
     },
     reminder: {
         type: Date
-    }
-}, { 
+    },
+    // Checklist functionality
+    checklist: [{
+        text: {
+            type: String,
+            required: true
+        },
+        completed: {
+            type: Boolean,
+            default: false
+        }
+    }]
+}, {
     timestamps: true,
     // Add indexes for better search performance
     indexes: [
@@ -73,8 +84,8 @@ const noteSchema = new mongoose.Schema({
 });
 
 // Create text index for search functionality
-noteSchema.index({ 
-    title: "text", 
+noteSchema.index({
+    title: "text",
     description: "text",
     labels: "text"
 });

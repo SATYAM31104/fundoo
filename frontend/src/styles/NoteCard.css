@@ -1,0 +1,213 @@
+.keep-note-card {
+    background: var(--note-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s, background 0.2s;
+    break-inside: avoid;
+    margin-bottom: 16px;
+    min-height: 100px;
+}
+
+.keep-note-card:hover {
+    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 4px 8px 3px rgba(60, 64, 67, 0.149);
+}
+
+.card-selection-check {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    background: #3c4043;
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 10;
+}
+
+.keep-note-card:hover .card-selection-check {
+    opacity: 1;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-main);
+    margin: 0;
+    padding-right: 24px;
+}
+
+.pin-icon {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: var(--text-muted);
+    opacity: 0;
+    transition: opacity 0.2s;
+    padding: 8px;
+    border-radius: 50%;
+}
+
+.keep-note-card:hover .pin-icon,
+.pin-icon.active {
+    opacity: 1;
+}
+
+.pin-icon.active {
+    color: var(--text-main);
+}
+
+.pin-icon:hover {
+    background: rgba(95, 99, 104, 0.1);
+}
+
+.card-content {
+    font-size: 14px;
+    color: var(--text-main);
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.card-labels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 12px;
+}
+
+.card-label-chip {
+    font-size: 11px;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 4px 10px;
+    border-radius: 12px;
+    color: var(--text-muted);
+}
+
+.card-actions {
+    display: flex;
+    gap: 2px;
+    margin-top: 12px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    margin-left: -8px;
+}
+
+.keep-note-card:hover .card-actions {
+    opacity: 1;
+}
+
+.card-actions button {
+    padding: 8px;
+    color: var(--text-muted);
+    border-radius: 50%;
+}
+
+.card-actions button:hover {
+    background: rgba(95, 99, 104, 0.1);
+    color: var(--text-main);
+}
+
+.card-checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 8px;
+}
+
+.checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.checklist-checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: default;
+}
+
+.checklist-text {
+    font-size: 14px;
+    color: var(--text-main);
+}
+
+.checklist-text.completed {
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+/* Background Color Classes */
+.color-red {
+    background-color: var(--color-red) !important;
+}
+
+.color-orange {
+    background-color: var(--color-orange) !important;
+}
+
+.color-yellow {
+    background-color: var(--color-yellow) !important;
+}
+
+.color-green {
+    background-color: var(--color-green) !important;
+}
+
+.color-teal {
+    background-color: var(--color-teal) !important;
+}
+
+.color-blue {
+    background-color: var(--color-blue) !important;
+}
+
+.color-dark-blue {
+    background-color: var(--color-dark-blue) !important;
+}
+
+.color-purple {
+    background-color: var(--color-purple) !important;
+}
+
+.color-pink {
+    background-color: var(--color-pink) !important;
+}
+
+.color-brown {
+    background-color: var(--color-brown) !important;
+}
+
+.color-grey {
+    background-color: var(--color-grey) !important;
+}
+
+/* In selection or hover, emphasize the card more if it has a color */
+.keep-note-card.color-red:hover,
+.keep-note-card.color-orange:hover,
+.keep-note-card.color-yellow:hover,
+.keep-note-card.color-green:hover,
+.keep-note-card.color-teal:hover,
+.keep-note-card.color-blue:hover,
+.keep-note-card.color-dark-blue:hover,
+.keep-note-card.color-purple:hover,
+.keep-note-card.color-pink:hover,
+.keep-note-card.color-brown:hover,
+.keep-note-card.color-grey:hover {
+    border-color: rgba(0, 0, 0, 0.1);
+}

@@ -1,0 +1,243 @@
+.keep-create-note {
+    max-width: 600px;
+    margin: 32px auto;
+    width: 100%;
+}
+
+.create-card {
+    background: var(--note-bg);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    transition: box-shadow 0.2s;
+}
+
+.keep-shadow {
+    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302), 0 2px 6px 2px rgba(60, 64, 67, 0.149);
+}
+
+.collapsed-view {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    cursor: text;
+}
+
+.placeholder {
+    flex: 1;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.collapsed-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.collapsed-actions button {
+    padding: 8px;
+    color: var(--text-muted);
+    border-radius: 50%;
+}
+
+.collapsed-actions button:hover {
+    background: rgba(95, 99, 104, 0.1);
+    color: var(--text-main);
+}
+
+.expanded-view {
+    display: flex;
+    flex-direction: column;
+}
+
+.create-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 16px;
+}
+
+.create-header input {
+    font-size: 16px;
+    font-weight: 500;
+    width: 100%;
+}
+
+.pin-btn {
+    color: var(--text-muted);
+    padding: 8px;
+}
+
+textarea {
+    padding: 12px 16px;
+    font-size: 14px;
+    resize: none;
+    min-height: 46px;
+    overflow: hidden;
+}
+
+.create-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 8px;
+}
+
+.footer-tools {
+    display: flex;
+    gap: 2px;
+}
+
+.footer-tools button {
+    padding: 8px;
+    color: var(--text-muted);
+    border-radius: 50%;
+}
+
+.footer-tools button:hover {
+    background: rgba(95, 99, 104, 0.1);
+    color: var(--text-main);
+}
+
+.close-btn {
+    padding: 8px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-main);
+    border-radius: 4px;
+}
+
+.close-btn:hover {
+    background: rgba(95, 99, 104, 0.1);
+}
+
+.checklist-container {
+    padding: 8px 16px;
+}
+
+.checklist-input-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 4px 0;
+}
+
+.checklist-input-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.checklist-input-item input[type="text"] {
+    flex: 1;
+    font-size: 14px;
+    border: none;
+    background: transparent;
+}
+
+.checklist-add {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.checklist-add:hover {
+    color: var(--text-main);
+}
+
+.create-note-labels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 8px 16px;
+}
+
+.label-chip {
+    background: rgba(0, 0, 0, 0.05);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.label-chip svg {
+    cursor: pointer;
+}
+
+.label-input-container {
+    padding: 8px 16px;
+}
+
+.label-input-container input {
+    width: 100%;
+    padding: 4px 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.footer-tools button.active {
+    background: rgba(66, 133, 244, 0.1);
+    color: #1a73e8;
+}
+
+/* Background Color Classes for Create Card */
+.create-card.color-red {
+    background-color: var(--color-red);
+    border-color: transparent;
+}
+
+.create-card.color-orange {
+    background-color: var(--color-orange);
+    border-color: transparent;
+}
+
+.create-card.color-yellow {
+    background-color: var(--color-yellow);
+    border-color: transparent;
+}
+
+.create-card.color-green {
+    background-color: var(--color-green);
+    border-color: transparent;
+}
+
+.create-card.color-teal {
+    background-color: var(--color-teal);
+    border-color: transparent;
+}
+
+.create-card.color-blue {
+    background-color: var(--color-blue);
+    border-color: transparent;
+}
+
+.create-card.color-dark-blue {
+    background-color: var(--color-dark-blue);
+    border-color: transparent;
+}
+
+.create-card.color-purple {
+    background-color: var(--color-purple);
+    border-color: transparent;
+}
+
+.create-card.color-pink {
+    background-color: var(--color-pink);
+    border-color: transparent;
+}
+
+.create-card.color-brown {
+    background-color: var(--color-brown);
+    border-color: transparent;
+}
+
+.create-card.color-grey {
+    background-color: var(--color-grey);
+    border-color: transparent;
+}

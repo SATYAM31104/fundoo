@@ -33,23 +33,24 @@ const invalidateUserCache = async (userId) => {
 // CREATE: Create a new note
 exports.createNote = async (req, res) => {
     try {
-        const { title, description, labels, color, reminder } = req.body;
+        const { title, description, labels, color, reminder, checklist } = req.body;
         const userId = req.user.id;
 
-        if (!title || !description) {
+        if (!title && !description && (!checklist || checklist.length === 0)) {
             return res.status(400).json({
                 success: false,
-                message: "Title and description are required"
+                message: "Title, description or checklist is required"
             });
         }
 
         const note = await Note.create({
-            title,
-            description,
+            title: title || "",
+            description: description || "",
             userId,
             labels: labels || [],
             color: color || "#ffffff",
-            reminder: reminder || null
+            reminder: reminder || null,
+            checklist: checklist || []
         });
 
         // Invalidate cache
@@ -92,14 +93,14 @@ exports.getAllNotes = async (req, res) => {
         }
 
         // Get from database - initial 20 notes, pinned first
-        const notes = await Note.find({ 
-            userId, 
+        const notes = await Note.find({
+            userId,
             isDeleted: false,
             isArchived: false
         })
-        .sort({ isPinned: -1, updatedAt: -1 })
-        .limit(20)
-        .populate('collaborators.userId', 'name email');
+            .sort({ isPinned: -1, updatedAt: -1 })
+            .limit(20)
+            .populate('collaborators.userId', 'name email');
 
         // Cache for 1 hour
         try {
@@ -146,14 +147,14 @@ exports.getArchivedNotes = async (req, res) => {
             console.error("Redis Get Error:", redisErr);
         }
 
-        const notes = await Note.find({ 
-            userId, 
+        const notes = await Note.find({
+            userId,
             isArchived: true,
             isDeleted: false
         })
-        .sort({ updatedAt: -1 })
-        .limit(20)
-        .populate('collaborators.userId', 'name email');
+            .sort({ updatedAt: -1 })
+            .limit(20)
+            .populate('collaborators.userId', 'name email');
 
         // Cache for 30 minutes
         try {
@@ -200,13 +201,13 @@ exports.getTrashNotes = async (req, res) => {
             console.error("Redis Get Error:", redisErr);
         }
 
-        const notes = await Note.find({ 
-            userId, 
+        const notes = await Note.find({
+            userId,
             isDeleted: true
         })
-        .sort({ updatedAt: -1 })
-        .limit(20)
-        .populate('collaborators.userId', 'name email');
+            .sort({ updatedAt: -1 })
+            .limit(20)
+            .populate('collaborators.userId', 'name email');
 
         // Cache for 15 minutes
         try {
@@ -253,14 +254,14 @@ exports.getPinnedNotes = async (req, res) => {
             console.error("Redis Get Error:", redisErr);
         }
 
-        const notes = await Note.find({ 
-            userId, 
+        const notes = await Note.find({
+            userId,
             isPinned: true,
             isDeleted: false
         })
-        .sort({ updatedAt: -1 })
-        .limit(20)
-        .populate('collaborators.userId', 'name email');
+            .sort({ updatedAt: -1 })
+            .limit(20)
+            .populate('collaborators.userId', 'name email');
 
         // Cache for 30 minutes
         try {
@@ -305,7 +306,7 @@ exports.toggleArchiveNote = async (req, res) => {
         if (note.isArchived) {
             note.isPinned = false;
         }
-        
+
         await note.save();
         await invalidateUserCache(userId);
 
@@ -343,7 +344,7 @@ exports.togglePinNote = async (req, res) => {
         if (note.isPinned) {
             note.isArchived = false;
         }
-        
+
         await note.save();
         await invalidateUserCache(userId);
 
@@ -410,16 +411,18 @@ exports.updateLabels = async (req, res) => {
 exports.updateNote = async (req, res) => {
     try {
         const { noteId } = req.params;
-        const { title, description, color, reminder } = req.body;
+        const { title, description, color, reminder, checklist, labels } = req.body;
         const userId = req.user.id;
 
         const updatedNote = await Note.findOneAndUpdate(
             { _id: noteId, userId, isDeleted: false },
-            { 
-                ...(title && { title }),
-                ...(description && { description }),
-                ...(color && { color }),
-                ...(reminder !== undefined && { reminder })
+            {
+                ...(title !== undefined && { title }),
+                ...(description !== undefined && { description }),
+                ...(color !== undefined && { color }),
+                ...(reminder !== undefined && { reminder }),
+                ...(checklist !== undefined && { checklist }),
+                ...(labels !== undefined && { labels })
             },
             { new: true, runValidators: true }
         );
@@ -456,7 +459,7 @@ exports.moveToTrash = async (req, res) => {
 
         const note = await Note.findOneAndUpdate(
             { _id: noteId, userId, isDeleted: false },
-            { 
+            {
                 isDeleted: true,
                 isPinned: false,
                 isArchived: false
@@ -754,9 +757,9 @@ exports.getSharedNotes = async (req, res) => {
             'collaborators.userId': userId,
             isDeleted: false
         })
-        .sort({ updatedAt: -1 })
-        .populate('userId', 'name email')
-        .populate('collaborators.userId', 'name email');
+            .sort({ updatedAt: -1 })
+            .populate('userId', 'name email')
+            .populate('collaborators.userId', 'name email');
 
         return res.status(200).json({
             success: true,
@@ -776,3 +779,128 @@ exports.getSharedNotes = async (req, res) => {
 
 // Legacy function for backward compatibility
 exports.deleteNote = exports.moveToTrash;
+
+// CREATE: Add new label to user's list
+exports.createLabel = async (req, res) => {
+    try {
+        const { labelName } = req.body;
+        const userId = req.user.id;
+
+        if (!labelName) {
+            return res.status(400).json({ success: false, message: "Label name is required" });
+        }
+
+        const user = await User.findById(userId);
+        if (!user.labels.includes(labelName)) {
+            user.labels.push(labelName);
+            await user.save();
+        }
+
+        return res.status(200).json({
+            success: true,
+            labels: user.labels
+        });
+    } catch (error) {
+        console.error("Create label error:", error);
+        return res.status(500).json({ success: false, message: "Failed to create label" });
+    }
+};
+
+// READ: Get all labels for a user
+exports.getLabels = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const user = await User.findById(userId);
+
+        // Migration: if user has no labels but notes do, populate them
+        if (!user.labels || user.labels.length === 0) {
+            const notes = await Note.find({ userId, isDeleted: false }, 'labels');
+            const labels = new Set();
+            notes.forEach(note => note.labels.forEach(l => labels.add(l)));
+
+            if (labels.size > 0) {
+                user.labels = Array.from(labels);
+                await user.save();
+            }
+        }
+
+        return res.status(200).json({
+            success: true,
+            labels: user.labels || []
+        });
+    } catch (error) {
+        console.error("Get labels error:", error);
+        return res.status(500).json({ success: false, message: "Failed to retrieve labels" });
+    }
+};
+
+// UPDATE: Rename label globally
+exports.renameLabel = async (req, res) => {
+    try {
+        const { oldName, newName } = req.body;
+        const userId = req.user.id;
+
+        if (!oldName || !newName) {
+            return res.status(400).json({ success: false, message: "Old and new label names are required" });
+        }
+
+        // 1. Update in Notes
+        await Note.updateMany(
+            { userId, labels: oldName },
+            { $set: { "labels.$": newName } }
+        );
+
+        // 2. Update in User
+        const user = await User.findById(userId);
+        const index = user.labels.indexOf(oldName);
+        if (index !== -1) {
+            user.labels[index] = newName;
+            // Clean duplicates if any
+            user.labels = [...new Set(user.labels)];
+            await user.save();
+        }
+
+        await invalidateUserCache(userId);
+
+        return res.status(200).json({
+            success: true,
+            message: `Label renamed successfully`
+        });
+    } catch (error) {
+        console.error("Rename label error:", error);
+        return res.status(500).json({ success: false, message: "Failed to rename label" });
+    }
+};
+
+// DELETE: Delete label globally
+exports.deleteLabel = async (req, res) => {
+    try {
+        const { labelName } = req.body;
+        const userId = req.user.id;
+
+        if (!labelName) {
+            return res.status(400).json({ success: false, message: "Label name is required" });
+        }
+
+        // 1. Remove from Notes
+        await Note.updateMany(
+            { userId, labels: labelName },
+            { $pull: { labels: labelName } }
+        );
+
+        // 2. Remove from User
+        const user = await User.findById(userId);
+        user.labels = user.labels.filter(l => l !== labelName);
+        await user.save();
+
+        await invalidateUserCache(userId);
+
+        return res.status(200).json({
+            success: true,
+            message: `Label deleted successfully`
+        });
+    } catch (error) {
+        console.error("Delete label error:", error);
+        return res.status(500).json({ success: false, message: "Failed to delete label" });
+    }
+};
